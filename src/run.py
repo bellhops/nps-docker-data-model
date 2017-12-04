@@ -92,7 +92,7 @@ class PromoterScraper(object):
                                                                             count=len(self.feedback)))
 
         self.feedback.columns = self.clean_columns()
-        self.feedback = self.feedback.comment.apply(lambda x: self.text_replace(self.null_character_replace(x)))
+        self.feedback['comment'] = self.feedback.comment.apply(lambda x: self.text_replace(self.null_character_replace(x)))
 
     def store_feedback(self):
         gospel_conn = create_engine(self.gospel_db_url)
