@@ -111,9 +111,6 @@ if __name__ == "__main__":
 
 
     gospel_db_url = os.environ['GOSPEL_DB_URL']
-    # token = '605d8995fd0960552851dc0f35a7614b4bb95e03'
-    # destination_schema_name = 'zzz_dbt_test_naveen'
-    # destination_table_name = 'nps_data_test'
 
     args = get_args()
     token = str(args.token)
