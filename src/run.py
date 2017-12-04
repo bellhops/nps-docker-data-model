@@ -109,7 +109,6 @@ def get_args():
 
 if __name__ == "__main__":
 
-
     gospel_db_url = os.environ['GOSPEL_DB_URL']
 
     args = get_args()
