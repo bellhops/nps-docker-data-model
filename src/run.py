@@ -96,6 +96,8 @@ class PromoterScraper(object):
 
     def store_feedback(self):
         gospel_conn = create_engine(self.gospel_db_url)
+        logger.info("Storing in schema: {schema_name} table: {table_name}".format(schema_name=self.destination_schema_name,
+                                                                                  table_name=self.destination_table_name))
         self.feedback.to_sql(self.destination_table_name, gospel_conn, schema=self.destination_schema_name, if_exists='replace')
 
 
@@ -106,6 +108,7 @@ def get_args():
     parser.add_argument("--destination_table_name", help="Destination table name", type=str)
     args = parser.parse_args()
     return args
+
 
 if __name__ == "__main__":
 
@@ -132,3 +135,5 @@ if __name__ == "__main__":
     )
 
     logger.info("Total number of feedbacks scraped: {count}".format(count=len(promoter_scraper.feedback)))
+
+    promoter_scraper.store_feedback()
