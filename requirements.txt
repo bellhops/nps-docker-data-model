@@ -1,4 +1,5 @@
-pandas
-scikit-learn
-sqlalchemy
-psycopg2
+pandas==0.18.1
+sqlalchemy==1.1.14
+psycopg2==2.7.3
+urllib3==1.22
+ipdb

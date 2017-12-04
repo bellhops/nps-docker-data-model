@@ -13,4 +13,4 @@ build:
 
 .PHONY: run
 run: build
-	docker run --env-file=.env $(model_name) python3 run.py
+	docker run -i --env-file=.env $(model_name) python3 run.py ${ARGS}
