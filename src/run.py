@@ -81,6 +81,16 @@ class PromoterScraper(object):
             logger.info("Getting feedback from url: " + url)
             data = self.get_promoter_data(url)
             page_df = json_normalize(data['results'])
+            if 'contact.attributes.Order Id' in page_df.columns and 'contact.attributes.order id' in page_df.columns:
+                order_id = []
+                for index, row in page_df.iterrows():
+                    if not pd.isnull(row['contact.attributes.Order Id']):
+                        order_id.append(row['contact.attributes.Order Id'])
+                    else:
+                        order_id.append(row['contact.attributes.order id'])
+                page_df['order_id'] = order_id
+                page_df.drop(['contact.attributes.order id', 'contact.attributes.Order Id'], axis=1, inplace=True)
+
             if len(self.feedback) == 0:
                 logger.info("Storing first page results: {page_number}".format(page_number=page_number))
                 self.feedback = page_df
