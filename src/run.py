@@ -101,6 +101,10 @@ class PromoterScraper(object):
                         order_id.append(row['contact.attributes.order id'])
                 page_df['order_id'] = order_id
                 page_df.drop(['contact.attributes.order id', 'contact.attributes.Order Id'], axis=1, inplace=True)
+            elif 'contact.attributes.Order Id' in page_df.columns:
+                page_df.rename(columns={'contact.attributes.Order Id': 'order_id'}, inplace=True)
+            elif 'contact.attributes.order id' in page_df.columns:
+                page_df.rename(columns={'contact.attributes.order id': 'order_id'}, inplace=True)
 
             available_columns = [column for column in self.columns if column in page_df.columns]
             cleaned_df = page_df[available_columns]
