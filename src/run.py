@@ -27,7 +27,18 @@ class PromoterScraper(object):
 
         self.feedback_length = self.get_total_count()
         self.total_number_of_pages = int(math.ceil(float(self.feedback_length)/100))
-        self.feedback = pd.DataFrame()
+
+        self.columns = [
+            'order_id',
+            'order_number',
+            'contact_email',
+            'score',
+            'score_type',
+            'posted_date',
+            'comment',
+            'campaign'
+        ]
+        self.feedback = pd.DataFrame(columns=self.columns)
         self.get_feedback()
 
     def get_promoter_data(self, url):
@@ -90,14 +101,20 @@ class PromoterScraper(object):
                         order_id.append(row['contact.attributes.order id'])
                 page_df['order_id'] = order_id
                 page_df.drop(['contact.attributes.order id', 'contact.attributes.Order Id'], axis=1, inplace=True)
+            elif 'contact.attributes.Order Id' in page_df.columns:
+                page_df.rename(columns={'contact.attributes.Order Id': 'order_id'}, inplace=True)
+            elif 'contact.attributes.order id' in page_df.columns:
+                page_df.rename(columns={'contact.attributes.order id': 'order_id'}, inplace=True)
 
+            available_columns = [column for column in self.columns if column in page_df.columns]
+            cleaned_df = page_df[available_columns]
             if len(self.feedback) == 0:
                 logger.info("Storing first page results: {page_number}".format(page_number=page_number))
-                self.feedback = page_df
+                self.feedback = self.feedback.append(cleaned_df)
                 logger.info("Results in first page: {count}".format(count=len(self.feedback)))
             else:
                 logger.info("Appending page results: {page_number}".format(page_number=page_number))
-                self.feedback = self.feedback.append(page_df)
+                self.feedback = self.feedback.append(cleaned_df)
                 logger.info("Results in page: {page_number} count:{count}".format(page_number=page_number,
                                                                             count=len(self.feedback)))
 
